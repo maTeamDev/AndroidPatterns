@@ -18,22 +18,15 @@ package com.example.androidpatterns.patterns.first
  */
 class MoviesFinderApp {
 
-    fun printMovieByName(name:String){
+    fun printMovieByName(name: String) {
         TODO("Implementation")
     }
-
-
 }
-
 
 
 fun main() {
     val moviesFinder = MoviesFinderApp()
-
     moviesFinder.printMovieByName("Joker")
-
-
-
 }
 
 
