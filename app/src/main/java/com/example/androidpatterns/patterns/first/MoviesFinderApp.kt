@@ -23,7 +23,7 @@ class MoviesFinderApp {
         repository.printMovieByName(name)
     }
 
-    fun getMoviesByGenre (genre: String){
+    fun getMoviesByGenre(genre: String) {
         repository.getMoviesByGenre(genre)
     }
 
@@ -31,70 +31,87 @@ class MoviesFinderApp {
         repository.getNewestMovies()
     }
 }
- /*Remote: Permission to maTeamDev/AndroidPatterns.git denied to Shymakher.
- unable to access 'https://github.com/maTeamDev/AndroidPatterns/':
- The requested URL returned error: 403*/
-
 
 fun main() {
     val moviesFinder = MoviesFinderApp()
-    moviesFinder.printMovieByName("Joker2")
-    moviesFinder.getMoviesByGenre("Detective")
-//    moviesFinder.getNewestMovies()
+    moviesFinder.printMovieByName("Joker")
 }
 
 data class Movie(val id: Int, val name: String, val year: Int, val genre: String)
 
 class IMDB {
-    val movies = mutableListOf(
+    private val movies = mutableListOf(
         Movie(1, "Sherlock", 2000, "Detective"),
         Movie(2, "Ghost hunters", 2005, "Family"),
         Movie(3, "Spanch Bob", 2019, "Cartoon"),
         Movie(4, "Wheel", 2019, "Detective")
     )
+
+    fun findMovieByName(name: String): List<Movie> {
+        return movies.filter { it.name == name }
+    }
+
+    fun getMoviesByGenre(genre: String): List<Movie> {
+        return movies.filter { it.genre == genre }
+    }
+
+    fun getNewestMovies(): List<Movie> {
+        return movies.filter { it.year == 2019 }
+    }
 }
 
 class Kinopoisk {
-    val movies = mutableListOf(
+    private val movies = mutableListOf(
         Movie(1, "Sherlock", 2000, "Detective"),
         Movie(2, "Joker", 2019, "Drama"),
         Movie(3, "Spider Man", 2005, "Fantasy"),
         Movie(4, "Sprinter", 2005, "Drama")
     )
+
+    fun findMovieByName(name: String): List<Movie> {
+        return movies.filter { it.name == name }
+    }
+
+    fun getMoviesByGenre(genre: String): List<Movie> {
+        return movies.filter { it.genre == genre }
+    }
+
+    fun getNewestMovies(): List<Movie> {
+        return movies.filter { it.year == 2019 }
+    }
 }
 
 class Repository {
-    private val imdb = IMDB()
-    private val kinopoisk = Kinopoisk()
+    private val imdbServer = IMDB()
+    private val kinopoiskServer = Kinopoisk()
 
     fun printMovieByName(name: String) {
-        var result = imdb.movies.filter { it.name == name }
-        if(result.isEmpty()){
-            result =  kinopoisk.movies.filter{ it.name == name }
+        var movie = imdbServer.findMovieByName(name)
+        if (movie.isEmpty()) {
+            movie = kinopoiskServer.findMovieByName(name)
         }
-        if(result.isEmpty()){
+        if (movie.isEmpty()) {
             println("There is no movie")
         } else {
-            println(result)
+            println(movie)
         }
-
     }
 
-    fun getMoviesByGenre (genre: String){
-        val  resultIMDB = imdb.movies.filter { it.genre == genre}
-        val resultKinopoisk = kinopoisk.movies.filter { it.genre == genre}
-        val result = mutableListOf<Movie>()
-        result.addAll(resultIMDB)
-        result.addAll(resultKinopoisk)
-        println(result.distinct())
+    fun getMoviesByGenre(genre: String) {
+        val imdbMovies = imdbServer.getMoviesByGenre(genre)
+        val kinopoiskMovies = kinopoiskServer.getMoviesByGenre(genre)
+        val movies = mutableListOf<Movie>()
+        movies.addAll(imdbMovies)
+        movies.addAll(kinopoiskMovies)
+        println(movies.distinctBy { it.name })
     }
 
     fun getNewestMovies() {
-        val  resultIMDB = imdb.movies.filter { it.year == 2019}
-        val resultKinopoisk = kinopoisk.movies.filter { it.year == 2019}
-        val result = mutableListOf<Movie>()
-        result.addAll(resultIMDB)
-        result.addAll(resultKinopoisk)
-        println(result.distinct())
+        val imdbMovies = imdbServer.getNewestMovies()
+        val kinopoiskMovies = kinopoiskServer.getNewestMovies()
+        val movie = mutableListOf<Movie>()
+        movie.addAll(imdbMovies)
+        movie.addAll(kinopoiskMovies)
+        println(movie.distinctBy { it.name })
     }
 }
