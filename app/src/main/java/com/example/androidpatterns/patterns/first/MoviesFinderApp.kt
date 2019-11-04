@@ -17,20 +17,84 @@ package com.example.androidpatterns.patterns.first
  * Use this class as a start point
  */
 class MoviesFinderApp {
+    private val repository = Repository()
 
     fun printMovieByName(name: String) {
-        TODO("Implementation")
+        repository.printMovieByName(name)
+    }
+
+    fun getMoviesByGenre (genre: String){
+        repository.getMoviesByGenre(genre)
+    }
+
+    fun getNewestMovies() {
+        repository.getNewestMovies()
     }
 }
+ /*Remote: Permission to maTeamDev/AndroidPatterns.git denied to Shymakher.
+ unable to access 'https://github.com/maTeamDev/AndroidPatterns/':
+ The requested URL returned error: 403*/
 
 
 fun main() {
     val moviesFinder = MoviesFinderApp()
-    moviesFinder.printMovieByName("Joker")
+    moviesFinder.printMovieByName("Joker2")
+    moviesFinder.getMoviesByGenre("Detective")
+//    moviesFinder.getNewestMovies()
 }
 
+data class Movie(val id: Int, val name: String, val year: Int, val genre: String)
 
+class IMDB {
+    val movies = mutableListOf(
+        Movie(1, "Sherlock", 2000, "Detective"),
+        Movie(2, "Ghost hunters", 2005, "Family"),
+        Movie(3, "Spanch Bob", 2019, "Cartoon"),
+        Movie(4, "Wheel", 2019, "Detective")
+    )
+}
 
+class Kinopoisk {
+    val movies = mutableListOf(
+        Movie(1, "Sherlock", 2000, "Detective"),
+        Movie(2, "Joker", 2019, "Drama"),
+        Movie(3, "Spider Man", 2005, "Fantasy"),
+        Movie(4, "Sprinter", 2005, "Drama")
+    )
+}
 
+class Repository {
+    private val imdb = IMDB()
+    private val kinopoisk = Kinopoisk()
 
+    fun printMovieByName(name: String) {
+        var result = imdb.movies.filter { it.name == name }
+        if(result.isEmpty()){
+            result =  kinopoisk.movies.filter{ it.name == name }
+        }
+        if(result.isEmpty()){
+            println("There is no movie")
+        } else {
+            println(result)
+        }
 
+    }
+
+    fun getMoviesByGenre (genre: String){
+        val  resultIMDB = imdb.movies.filter { it.genre == genre}
+        val resultKinopoisk = kinopoisk.movies.filter { it.genre == genre}
+        val result = mutableListOf<Movie>()
+        result.addAll(resultIMDB)
+        result.addAll(resultKinopoisk)
+        println(result.distinct())
+    }
+
+    fun getNewestMovies() {
+        val  resultIMDB = imdb.movies.filter { it.year == 2019}
+        val resultKinopoisk = kinopoisk.movies.filter { it.year == 2019}
+        val result = mutableListOf<Movie>()
+        result.addAll(resultIMDB)
+        result.addAll(resultKinopoisk)
+        println(result.distinct())
+    }
+}
