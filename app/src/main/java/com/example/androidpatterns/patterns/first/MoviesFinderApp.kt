@@ -20,16 +20,29 @@ class MoviesFinderApp {
     private val repository = Repository()
 
     fun printMovieByName(name: String) {
-        repository.printMovieByName(name)
+        val movie = repository.findMovieByName(name)
+        showInfo(movie)
     }
 
     fun getMoviesByGenre(genre: String) {
-        repository.getMoviesByGenre(genre)
+        var movies = repository.getListOfMoviesByGenre(genre)
+        movies = removeDuplicatesMovies(movies)
+        showInfo(movies)
     }
 
-    fun getNewestMovies() {
-        repository.getNewestMovies()
+    fun getNewestMovies(year: Int) {
+        var movies = repository.getListOfNewestMovies(year)
+        movies = removeDuplicatesMovies(movies)
+        showInfo(movies)
     }
+}
+
+fun removeDuplicatesMovies(movies: List<Movie>): MutableList<Movie> {
+    return movies.distinctBy { it.name }.toMutableList()
+}
+
+fun showInfo(data: Any) {
+    println(data)
 }
 
 fun main() {
@@ -51,12 +64,12 @@ class IMDB {
         return movies.filter { it.name == name }
     }
 
-    fun getMoviesByGenre(genre: String): List<Movie> {
+    fun getListOfMoviesByGenre(genre: String): List<Movie> {
         return movies.filter { it.genre == genre }
     }
 
-    fun getNewestMovies(): List<Movie> {
-        return movies.filter { it.year == 2019 }
+    fun getListOfNewestMovies(year: Int): List<Movie> {
+        return movies.filter { it.year == year }
     }
 }
 
@@ -72,12 +85,12 @@ class Kinopoisk {
         return movies.filter { it.name == name }
     }
 
-    fun getMoviesByGenre(genre: String): List<Movie> {
+    fun getListOfMoviesByGenre(genre: String): List<Movie> {
         return movies.filter { it.genre == genre }
     }
 
-    fun getNewestMovies(): List<Movie> {
-        return movies.filter { it.year == 2019 }
+    fun getListOfNewestMovies(year: Int): List<Movie> {
+        return movies.filter { it.year == year }
     }
 }
 
@@ -85,33 +98,30 @@ class Repository {
     private val imdbServer = IMDB()
     private val kinopoiskServer = Kinopoisk()
 
-    fun printMovieByName(name: String) {
+    fun findMovieByName(name: String): List<Movie> {
         var movie = imdbServer.findMovieByName(name)
         if (movie.isEmpty()) {
             movie = kinopoiskServer.findMovieByName(name)
         }
-        if (movie.isEmpty()) {
-            println("There is no movie")
-        } else {
-            println(movie)
-        }
+        return movie
     }
 
-    fun getMoviesByGenre(genre: String) {
-        val imdbMovies = imdbServer.getMoviesByGenre(genre)
-        val kinopoiskMovies = kinopoiskServer.getMoviesByGenre(genre)
+    fun getListOfMoviesByGenre(genre: String): MutableList<Movie> {
+        val imdbMovies = imdbServer.getListOfMoviesByGenre(genre)
+        val kinopoiskMovies = kinopoiskServer.getListOfMoviesByGenre(genre)
+        return generateNewListOfMovies(imdbMovies, kinopoiskMovies)
+    }
+
+    fun getListOfNewestMovies(year: Int): MutableList<Movie> {
+        val imdbMovies = imdbServer.getListOfNewestMovies(year)
+        val kinopoiskMovies = kinopoiskServer.getListOfNewestMovies(year)
+        return generateNewListOfMovies(imdbMovies, kinopoiskMovies)
+    }
+
+    private fun generateNewListOfMovies(imdbMovies: List<Movie>, kinopoiskMovies: List<Movie>): MutableList<Movie> {
         val movies = mutableListOf<Movie>()
         movies.addAll(imdbMovies)
         movies.addAll(kinopoiskMovies)
-        println(movies.distinctBy { it.name })
-    }
-
-    fun getNewestMovies() {
-        val imdbMovies = imdbServer.getNewestMovies()
-        val kinopoiskMovies = kinopoiskServer.getNewestMovies()
-        val movie = mutableListOf<Movie>()
-        movie.addAll(imdbMovies)
-        movie.addAll(kinopoiskMovies)
-        println(movie.distinctBy { it.name })
+        return movies
     }
 }
