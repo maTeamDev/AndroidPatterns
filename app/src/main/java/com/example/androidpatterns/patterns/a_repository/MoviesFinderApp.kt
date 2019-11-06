@@ -1,4 +1,4 @@
-package com.example.androidpatterns.patterns.first
+package com.example.androidpatterns.patterns.a_repository
 
 
 /**
