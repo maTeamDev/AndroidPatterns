@@ -2,6 +2,8 @@ package com.example.androidpatterns.patterns.b_second
 
 import com.example.androidpatterns.patterns.b_second.entity.Movie
 import com.example.androidpatterns.patterns.b_second.repo.Repository
+import com.example.androidpatterns.patterns.b_second.utils.AnalyticManager
+import com.example.androidpatterns.patterns.b_second.utils.Logger
 
 
 /**
@@ -35,19 +37,23 @@ fun main() {
 
 class MoviesFinderApp {
     private val repository = Repository()
+    val analyticManager = AnalyticManager()
 
     fun showMovieByName(name: String) {
+        analyticManager.trackUserEvent("showMovieByName")
         val movie = repository.getMovieByName(name)
         showInfo(movie)
     }
 
     fun showMoviesByGenre(genre: String) {
+        analyticManager.trackUserEvent("showMoviesByGenre")
         var movies = repository.getMoviesByGenre(genre)
         movies = removeDuplicatesMovies(movies)
         showInfo(movies)
     }
 
     fun showMoviesNewestThan(year: Int) {
+        analyticManager.trackUserEvent("showMoviesNewestThan")
         var movies = repository.getMoviesNewestThan(year)
         movies = removeDuplicatesMovies(movies)
         showInfo(movies)

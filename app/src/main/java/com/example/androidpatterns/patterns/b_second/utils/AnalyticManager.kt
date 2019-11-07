@@ -2,10 +2,14 @@ package com.example.androidpatterns.patterns.b_second.utils
 
 
 class AnalyticManager {
+    val logger = Logger()
+    val networkManager = NetworkManager(logger)
     fun trackUserEvent(event: String) {
-        TODO("Check is internet available using NetworkManager class")
-        TODO("Print log using Logger class that says if event was sent to server or event can not be sent becouse of internet")
-        TODO("if network available - Send event to server using method I prepared")
+        if (networkManager.isNetworkAvailiable()) {
+            logger.printLog("AnalyticManager", "event was sent to server")
+            sendEventToServer(event)
+        }
+        else logger.printLog("AnalyticManager", "no internet, event wasn't sent")
     }
 
     private fun sendEventToServer(event: String) {
