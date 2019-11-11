@@ -46,7 +46,7 @@ class IMDB {
         return if (networkManager.isNetworkAvailiable()) {
             movies.filter { it.name == name }
         } else {
-            listOf()
+            emptyList()
         }
     }
 
@@ -54,7 +54,7 @@ class IMDB {
         return if (networkManager.isNetworkAvailiable()) {
             movies.filter { it.genre == genre }
         } else {
-            listOf()
+            emptyList()
         }
     }
 
@@ -62,7 +62,7 @@ class IMDB {
         return if (networkManager.isNetworkAvailiable()) {
             movies.filter { it.year >= year }
         } else {
-            listOf()
+            emptyList()
         }
     }
 }
@@ -109,7 +109,7 @@ class Kinopoisk {
         return if (networkManager.isNetworkAvailiable()) {
             movies.filter { it.name == name }
         } else {
-            listOf()
+            emptyList()
         }
     }
 
@@ -117,7 +117,7 @@ class Kinopoisk {
         return if (networkManager.isNetworkAvailiable()) {
             movies.filter { it.genre == genre }
         } else {
-            listOf()
+            emptyList()
         }
     }
 
@@ -125,7 +125,7 @@ class Kinopoisk {
         return if (networkManager.isNetworkAvailiable()) {
             movies.filter { it.year >= year }
         } else {
-            listOf()
+            emptyList()
         }
     }
 }
@@ -136,8 +136,7 @@ class Repository {
     private val logger = Logger()
 
     fun getMovieByName(name: String): List<Movie> {
-        logger.printLog("method", "getMovieByName")
-        logger.printLog("arguments", name)
+        logger.printLog("Repository", "getMovieByName: was called with params : name [$name]")
 
         var movie = imdbServer.getMovieByName(name)
         var server = "IMDB"
@@ -145,34 +144,33 @@ class Repository {
             movie = kinopoiskServer.getMovieByName(name)
             server = "Kinopoisk"
         }
-        logger.printLog("dataSource & value", "$server, $movie")
+        logger.printLog("Repository", "getMovieByName: return movie $movie from server $server")
         return movie
     }
 
     fun getMoviesByGenre(genre: String): MutableList<Movie> {
-        logger.printLog("method", "getMoviesByGenre")
-        logger.printLog("arguments", "genre")
+        logger.printLog("Repository", "getMovieByGenre: was called with params : name [$genre]")
         val imdbMovies = imdbServer.getListOfMoviesByGenre(genre)
         val kinopoiskMovies = kinopoiskServer.getListOfMoviesByGenre(genre)
-        return generateNewListOfMovies(imdbMovies, kinopoiskMovies)
+        return generateNewListOfMovies(imdbMovies, kinopoiskMovies, "getMoviesByGenre")
     }
 
     fun getMoviesNewestThan(year: Int): MutableList<Movie> {
-        logger.printLog("method", "getMoviesNewestThan")
-        logger.printLog("arguments", "year")
+        logger.printLog("Repository", "getMoviesNewestThan: was called with params : name [$year]")
         val imdbMovies = imdbServer.getListOfNewestMovies(year)
         val kinopoiskMovies = kinopoiskServer.getListOfNewestMovies(year)
-        return generateNewListOfMovies(imdbMovies, kinopoiskMovies)
+        return generateNewListOfMovies(imdbMovies, kinopoiskMovies, "getMoviesNewestThan")
     }
 
     private fun generateNewListOfMovies(
         imdbMovies: List<Movie>,
-        kinopoiskMovies: List<Movie>
+        kinopoiskMovies: List<Movie>,
+        funcName: String
     ): MutableList<Movie> {
         val movies = mutableListOf<Movie>()
         movies.addAll(imdbMovies)
         movies.addAll(kinopoiskMovies)
-        logger.printLog("dataSource & value", "IMDB & Kinopoisk, $movies")
+        logger.printLog("Repository", "$funcName: return movie $movies from IMDB & Kinopoisk servers")
         return movies
     }
 }

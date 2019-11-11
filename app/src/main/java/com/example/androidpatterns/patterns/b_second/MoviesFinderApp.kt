@@ -39,21 +39,22 @@ class MoviesFinderApp {
     fun showMovieByName(name: String) {
         val movie = repository.getMovieByName(name)
         showInfo(movie)
-        analyticManager.trackUserEvent("showMovieByName")
+        analyticManager.trackUserEvent("showMovieByName: was called with params: name [$name]")
     }
 
     fun showMoviesByGenre(genre: String) {
         var movies = repository.getMoviesByGenre(genre)
         movies = removeDuplicatesMovies(movies)
         showInfo(movies)
-        analyticManager.trackUserEvent("showMoviesByGenre")
+        analyticManager.trackUserEvent("showMoviesByGenre: was called with params: genre [$genre]")
     }
 
     fun showMoviesNewestThan(year: Int) {
         var movies = repository.getMoviesNewestThan(year)
         movies = removeDuplicatesMovies(movies)
         showInfo(movies)
-        analyticManager.trackUserEvent("showMoviesNewestThan")
+        analyticManager.trackUserEvent("showMoviesNewestThan: was called with params: year [$year]")
+
     }
 }
 

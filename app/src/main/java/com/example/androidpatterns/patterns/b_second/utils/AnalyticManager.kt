@@ -12,12 +12,12 @@ class AnalyticManager {
             sendEventToServer(event)
             logger.printLog(
                 loggerTag,
-                "This method was send to Server"
+                "Event $event was send to Server"
             )
         } else {
             logger.printLog(
                 loggerTag,
-                "This method was not send to Server because of internet connection"
+                "Event $event was not send to Server because of internet connection"
             )
         }
     }
