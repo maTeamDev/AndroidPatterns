@@ -1,8 +1,10 @@
 package com.example.androidpatterns.patterns.b_second
 
 import com.example.androidpatterns.patterns.b_second.entity.Movie
+import com.example.androidpatterns.patterns.b_second.repo.Genre
 import com.example.androidpatterns.patterns.b_second.repo.Repository
 import com.example.androidpatterns.patterns.b_second.utils.AnalyticManager
+import java.util.*
 
 
 /**
@@ -28,7 +30,8 @@ import com.example.androidpatterns.patterns.b_second.utils.AnalyticManager
 
 fun main() {
     val moviesFinder = MoviesFinderApp()
-    moviesFinder.showMovieByName("Sherlock")
+//    moviesFinder.showMovieByName("Sherlock")
+    moviesFinder.showMoviesByGenre(Genre.DETECTIVE)
 }
 
 
@@ -42,7 +45,7 @@ class MoviesFinderApp {
         analyticManager.trackUserEvent("showMovieByName: was called with params: name [$name]")
     }
 
-    fun showMoviesByGenre(genre: String) {
+    fun showMoviesByGenre(genre: Genre) {
         var movies = repository.getMoviesByGenre(genre)
         movies = removeDuplicatesMovies(movies)
         showInfo(movies)
