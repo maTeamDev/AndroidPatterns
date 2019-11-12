@@ -4,28 +4,30 @@ import com.example.androidpatterns.patterns.b_second.entity.Movie
 import com.example.androidpatterns.patterns.b_second.utils.Logger
 import com.example.androidpatterns.patterns.b_second.utils.NetworkManager
 
-enum class Genre{
+enum class Genre {
     DRAMA,
     COMEDY,
     THRILLER
 }
 
-class MovieFactory(){
+class MovieFactory() {
 
-    fun createMovie(id: Int, name: String, year: Int, genre: Genre, serverName: String ): Movie{
-        return Movie(id,
+    fun createMovie(id: Int, name: String, year: Int, genre: Genre, serverName: String): Movie {
+        return Movie(
+            id,
             name,
             year,
             genre,
             serverName,
-            System.currentTimeMillis())
+            System.currentTimeMillis()
+        )
     }
 
-    fun createMovieImdb(id: Int, name: String, year: Int, genre: Genre): Movie{
+    fun createMovieImdb(id: Int, name: String, year: Int, genre: Genre): Movie {
         return createMovie(id, name, year, genre, "Imdb")
     }
 
-    fun createMovieKinopoisk(id: Int, name: String, year: Int, genre: Genre): Movie{
+    fun createMovieKinopoisk(id: Int, name: String, year: Int, genre: Genre): Movie {
         return createMovie(id, name, year, genre, "Kinopoisk")
     }
 
@@ -44,20 +46,23 @@ class IMDB {
     )
 
     fun getMovieByName(name: String): List<Movie> {
-        var movies = movies.filter { it.name == name }
-        if (!networkManager.isNetworkAvailiable()) movies = listOf()
+        var movies = emptyList<Movie>()
+        if (networkManager.isNetworkAvailiable())
+            movies = movies.filter { it.name == name }
         return movies
     }
 
     fun getListOfMoviesByGenre(genre: Genre): List<Movie> {
-        var movies = movies.filter { it.genre == genre }
-        if (!networkManager.isNetworkAvailiable()) movies = listOf()
+        var movies = emptyList<Movie>()
+        if (networkManager.isNetworkAvailiable())
+            movies = movies.filter { it.genre == genre }
         return movies
     }
 
     fun getListOfNewestMovies(year: Int): List<Movie> {
-        var movies = movies.filter { it.year >= year }
-        if (!networkManager.isNetworkAvailiable()) movies = listOf()
+        var movies = emptyList<Movie>()
+        if (networkManager.isNetworkAvailiable())
+            movies = movies.filter { it.year >= year }
         return movies
     }
 }
@@ -74,20 +79,23 @@ class Kinopoisk {
     )
 
     fun getMovieByName(name: String): List<Movie> {
-        var movies = movies.filter { it.name == name }
-        if (!networkManager.isNetworkAvailiable()) movies = listOf()
+        var movies = emptyList<Movie>()
+        if (networkManager.isNetworkAvailiable())
+            movies = movies.filter { it.name == name }
         return movies
     }
 
     fun getListOfMoviesByGenre(genre: Genre): List<Movie> {
-        var movies = movies.filter { it.genre == genre }
-        if (!networkManager.isNetworkAvailiable()) movies = listOf()
+        var movies = emptyList<Movie>()
+        if (networkManager.isNetworkAvailiable())
+            movies = movies.filter { it.genre == genre }
         return movies
     }
 
     fun getListOfNewestMovies(year: Int): List<Movie> {
-        var movies = movies.filter { it.year >= year }
-        if (!networkManager.isNetworkAvailiable()) movies = listOf()
+        var movies = emptyList<Movie>()
+        if (networkManager.isNetworkAvailiable())
+            movies = movies.filter { it.year >= year }
         return movies
     }
 }
