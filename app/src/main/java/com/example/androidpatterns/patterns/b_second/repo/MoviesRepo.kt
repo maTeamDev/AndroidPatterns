@@ -4,42 +4,29 @@ import com.example.androidpatterns.patterns.b_second.entity.Movie
 import com.example.androidpatterns.patterns.b_second.utils.Logger
 import com.example.androidpatterns.patterns.b_second.utils.NetworkManager
 
+enum class Genre{
+    DRAMA,
+    COMEDY,
+    TRILLER
+}
+
+fun createMovie(id: Int, name: String, year: Int, genre: Genre, serverName: String ): Movie{
+    return Movie(id,
+        name,
+        year,
+        genre,
+        serverName,
+        System.currentTimeMillis())
+}
+
 class IMDB {
-    val logger = Logger()
-    val networkManager = NetworkManager(logger)
+    private val logger = Logger()
+    private val networkManager = NetworkManager(logger)
     private val movies = mutableListOf(
-        Movie(
-            1,
-            "Sherlock",
-            2000,
-            "Detective"
-            , "imdb",
-            System.currentTimeMillis()
-        ),
-        Movie(
-            2,
-            "Ghost hunters",
-            2005,
-            "Family"
-            , "imdb",
-            System.currentTimeMillis()
-        ),
-        Movie(
-            3,
-            "Spanch Bob",
-            2019,
-            "Cartoon"
-            , "imdb",
-            System.currentTimeMillis()
-        ),
-        Movie(
-            4,
-            "Wheel",
-            2019,
-            "Detective"
-            , "imdb",
-            System.currentTimeMillis()
-        )
+        createMovie(1, "Sherlock", 2000, Genre.DRAMA, "imdb"),
+        createMovie(2, "Ghost hunters", 2019, Genre.COMEDY, "imdb"),
+        createMovie(3, "Spanch Bob", 2019, Genre.DRAMA, "imdb"),
+        createMovie(4, "Wheel", 2005, Genre.TRILLER, "imdb")
     )
 
     fun getMovieByName(name: String): List<Movie> {
@@ -48,7 +35,7 @@ class IMDB {
         return movies
     }
 
-    fun getListOfMoviesByGenre(genre: String): List<Movie> {
+    fun getListOfMoviesByGenre(genre: Genre): List<Movie> {
         var movies = movies.filter { it.genre == genre }
         if (!networkManager.isNetworkAvailiable()) movies = listOf()
         return movies
@@ -62,41 +49,13 @@ class IMDB {
 }
 
 class Kinopoisk {
-    val logger = Logger()
-    val networkManager = NetworkManager(logger)
+    private val logger = Logger()
+    private val networkManager = NetworkManager(logger)
     private val movies = mutableListOf(
-        Movie(
-            1,
-            "Sherlock",
-            2000,
-            "Detective"
-            , "Kinopoisk",
-            System.currentTimeMillis()
-        ),
-        Movie(
-            2,
-            "Joker",
-            2019,
-            "Drama"
-            , "Kinopoisk",
-            System.currentTimeMillis()
-        ),
-        Movie(
-            3,
-            "Spider Man",
-            2005,
-            "Fantasy"
-            , "Kinopoisk",
-            System.currentTimeMillis()
-        ),
-        Movie(
-            4,
-            "Sprinter",
-            2005,
-            "Drama"
-            , "Kinopoisk",
-            System.currentTimeMillis()
-        )
+        createMovie(1, "Sherlock", 2000, Genre.DRAMA, "Kinopoisk"),
+        createMovie(2, "Ghost hunters", 2019, Genre.COMEDY, "Kinopoisk"),
+        createMovie(3, "Spanch Bob", 2019, Genre.DRAMA, "Kinopoisk"),
+        createMovie(4, "Wheel", 2005, Genre.TRILLER, "Kinopoisk")
     )
 
     fun getMovieByName(name: String): List<Movie> {
@@ -105,7 +64,7 @@ class Kinopoisk {
         return movies
     }
 
-    fun getListOfMoviesByGenre(genre: String): List<Movie> {
+    fun getListOfMoviesByGenre(genre: Genre): List<Movie> {
         var movies = movies.filter { it.genre == genre }
         if (!networkManager.isNetworkAvailiable()) movies = listOf()
         return movies
@@ -140,28 +99,30 @@ class Repository {
         return movie
     }
 
-    fun getMoviesByGenre(genre: String): MutableList<Movie> {
+    fun getMoviesByGenre(genre: Genre): MutableList<Movie> {
         val imdbMovies = imdbServer.getListOfMoviesByGenre(genre)
         val kinopoiskMovies = kinopoiskServer.getListOfMoviesByGenre(genre)
+        val movies = generateNewListOfMovies(imdbMovies, kinopoiskMovies)
         logger.printLog(
             "MoviesRepo",
             "method: getMoviesByGenre " +
                     "argument: $genre " +
-                    "method return: ${generateNewListOfMovies(imdbMovies, kinopoiskMovies)} "
+                    "method return: $movies} "
         )
-        return generateNewListOfMovies(imdbMovies, kinopoiskMovies)
+        return movies
     }
 
     fun getMoviesNewestThan(year: Int): MutableList<Movie> {
         val imdbMovies = imdbServer.getListOfNewestMovies(year)
         val kinopoiskMovies = kinopoiskServer.getListOfNewestMovies(year)
+        val movies = generateNewListOfMovies(imdbMovies, kinopoiskMovies)
         logger.printLog(
             "MoviesRepo",
             "method: getMoviesNewestThan " +
                     "argument: $year " +
-                    "method return: ${generateNewListOfMovies(imdbMovies, kinopoiskMovies)} "
+                    "method return: $movies "
         )
-        return generateNewListOfMovies(imdbMovies, kinopoiskMovies)
+        return movies
     }
 
     private fun generateNewListOfMovies(

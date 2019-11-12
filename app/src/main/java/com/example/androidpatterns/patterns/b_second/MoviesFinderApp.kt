@@ -1,6 +1,7 @@
 package com.example.androidpatterns.patterns.b_second
 
 import com.example.androidpatterns.patterns.b_second.entity.Movie
+import com.example.androidpatterns.patterns.b_second.repo.Genre
 import com.example.androidpatterns.patterns.b_second.repo.Repository
 import com.example.androidpatterns.patterns.b_second.utils.AnalyticManager
 import com.example.androidpatterns.patterns.b_second.utils.Logger
@@ -25,35 +26,38 @@ import com.example.androidpatterns.patterns.b_second.utils.Logger
  * 4) Please update Movie class by adding two additional properties to it.
  *    - serverName:String (IMDB or Kinopoisk)
  *    - downloadTimestamp:Long (you can use Java SDK method System.currentTimeMillis()):
+ *
+ * 1) применить паттерн Фабрика для создания обектов Movie.
+ * 2) Создать ENUM  class Genre, в нём перечислить варианты и заменить Movie.genre стринг на enum
  **/
 
 fun main() {
     val moviesFinder = MoviesFinderApp()
     moviesFinder.showMovieByName("Joker")
-    moviesFinder.showMoviesByGenre("Detective")
+    moviesFinder.showMoviesByGenre(Genre.DRAMA)
     moviesFinder.showMoviesNewestThan(2018)
 }
 
 
 class MoviesFinderApp {
     private val repository = Repository()
-    val analyticManager = AnalyticManager()
+    private val analyticManager = AnalyticManager()
 
     fun showMovieByName(name: String) {
-        analyticManager.trackUserEvent("showMovieByName")
+        analyticManager.trackUserEvent("showMovieByName", name)
         val movie = repository.getMovieByName(name)
         showInfo(movie)
     }
 
-    fun showMoviesByGenre(genre: String) {
-        analyticManager.trackUserEvent("showMoviesByGenre")
+    fun showMoviesByGenre(genre: Genre) {
+        analyticManager.trackUserEvent("showMoviesByGenre", genre.toString())
         var movies = repository.getMoviesByGenre(genre)
         movies = removeDuplicatesMovies(movies)
         showInfo(movies)
     }
 
     fun showMoviesNewestThan(year: Int) {
-        analyticManager.trackUserEvent("showMoviesNewestThan")
+        analyticManager.trackUserEvent("showMoviesNewestThan", year.toString())
         var movies = repository.getMoviesNewestThan(year)
         movies = removeDuplicatesMovies(movies)
         showInfo(movies)
