@@ -1,11 +1,10 @@
 package com.example.androidpatterns.patterns.b_second
 
+import com.example.androidpatterns.patterns.b_second.config.AppConfig
 import com.example.androidpatterns.patterns.b_second.entity.Movie
 import com.example.androidpatterns.patterns.b_second.repo.Genre
 import com.example.androidpatterns.patterns.b_second.repo.Repository
 import com.example.androidpatterns.patterns.b_second.utils.AnalyticManager
-import java.util.*
-
 
 /**
  * In this task we are going to extend our application and make it look a little bit closer to reality.
@@ -26,16 +25,28 @@ import java.util.*
  * 4) Please update Movie class by adding two additional properties to it.
  *    - serverName:String (IMDB or Kinopoisk)
  *    - downloadTimestamp:Long (you can use Java SDK method System.currentTimeMillis()):
+ *
+ * Seconds part:
+ *
+ * 5) I created AppConfig class and added it as a primary constructor parameter to the MoviesFinderApp class.
+ *    Please use config object in order to achieve following goals:
+ *     - enable/disable all logs in the app
+ *     - enable/disable networking in the app.
+ *
+ * 6) Let's reduce memory allocation  of our app. Currently we have 4 Logger instances creation in the code.
+ *     - Please refactor the code in order to reduce amount of Logger instances to 1
  **/
 
 fun main() {
-    val moviesFinder = MoviesFinderApp()
-//    moviesFinder.showMovieByName("Sherlock")
+    val config = AppConfig(isLoggingOn = true, isNetworkPermitted = true)
+    val moviesFinder = MoviesFinderApp(config)
+
+    moviesFinder.showMovieByName("Sherlock")
     moviesFinder.showMoviesByGenre(Genre.DETECTIVE)
 }
 
 
-class MoviesFinderApp {
+class MoviesFinderApp(private val config: AppConfig) {
     private val repository = Repository()
     private val analyticManager = AnalyticManager()
 
