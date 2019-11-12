@@ -67,10 +67,10 @@ class Kinopoisk {
     private val networkManager = NetworkManager(logger)
     private val movieFactory = MovieFactory()
     private val movies = mutableListOf(
-        movieFactory.createMovieImdb(1, "Sherlock", 2000, Genre.DRAMA),
-        movieFactory.createMovieImdb(2, "Ghost hunters", 2019, Genre.COMEDY),
-        movieFactory.createMovieImdb(3, "Spanch Bob", 2019, Genre.DRAMA),
-        movieFactory.createMovieImdb(4, "Wheel", 2005, Genre.THRILLER)
+        movieFactory.createMovieKinopoisk(1, "Sherlock", 2000, Genre.DRAMA),
+        movieFactory.createMovieKinopoisk(2, "Ghost hunters", 2019, Genre.COMEDY),
+        movieFactory.createMovieKinopoisk(3, "Spanch Bob", 2019, Genre.DRAMA),
+        movieFactory.createMovieKinopoisk(4, "Wheel", 2005, Genre.THRILLER)
     )
 
     fun getMovieByName(name: String): List<Movie> {
