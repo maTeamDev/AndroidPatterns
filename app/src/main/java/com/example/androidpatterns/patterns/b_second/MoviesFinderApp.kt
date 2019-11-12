@@ -1,10 +1,10 @@
 package com.example.androidpatterns.patterns.b_second
 
+import com.example.androidpatterns.patterns.b_second.config.AppConfig
 import com.example.androidpatterns.patterns.b_second.entity.Movie
 import com.example.androidpatterns.patterns.b_second.repo.Genre
 import com.example.androidpatterns.patterns.b_second.repo.Repository
 import com.example.androidpatterns.patterns.b_second.utils.AnalyticManager
-import com.example.androidpatterns.patterns.b_second.utils.Logger
 
 
 /**
@@ -29,17 +29,30 @@ import com.example.androidpatterns.patterns.b_second.utils.Logger
  *
  * 1) применить паттерн Фабрика для создания обектов Movie.
  * 2) Создать ENUM  class Genre, в нём перечислить варианты и заменить Movie.genre стринг на enum
+ *
+ * * Seconds part:
+ *
+ * 5) I created AppConfig class and added it as a primary constructor parameter to the MoviesFinderApp class.
+ *    Please use config object in order to achieve following goals:
+ *     - enable/disable all logs in the app
+ *     - enable/disable networking in the app.
+ *
+ * 6) Let's reduce memory allocation  of our app. Currently we have 4 Logger instances creation in the code.
+ *     - Please refactor the code in order to reduce amount of Logger instances to 1
+ *
  **/
 
 fun main() {
-    val moviesFinder = MoviesFinderApp()
+    val config = AppConfig(isLoggingOn = true, isNetworkPermitted = true)
+
+    val moviesFinder = MoviesFinderApp(config)
     moviesFinder.showMovieByName("Joker")
     moviesFinder.showMoviesByGenre(Genre.DRAMA)
     moviesFinder.showMoviesNewestThan(2018)
 }
 
 
-class MoviesFinderApp {
+class MoviesFinderApp(config: AppConfig) {
     private val repository = Repository()
     private val analyticManager = AnalyticManager()
 
