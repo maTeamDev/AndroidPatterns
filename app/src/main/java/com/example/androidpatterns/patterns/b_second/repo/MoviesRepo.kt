@@ -1,5 +1,6 @@
 package com.example.androidpatterns.patterns.b_second.repo
 
+import com.example.androidpatterns.patterns.b_second.config.AppConfig
 import com.example.androidpatterns.patterns.b_second.entity.Movie
 import com.example.androidpatterns.patterns.b_second.utils.Logger
 import com.example.androidpatterns.patterns.b_second.utils.NetworkManager
@@ -34,9 +35,8 @@ class MovieFactory() {
 }
 
 
-class IMDB {
-    private val logger = Logger()
-    private val networkManager = NetworkManager(logger)
+class IMDB(private val config: AppConfig, private val logger: Logger) {
+    private val networkManager = NetworkManager(config, logger)
     private val movieFactory = MovieFactory()
     private val movies = mutableListOf(
         movieFactory.createMovieImdb(1, "Sherlock", 2000, Genre.DRAMA),
@@ -67,9 +67,8 @@ class IMDB {
     }
 }
 
-class Kinopoisk {
-    private val logger = Logger()
-    private val networkManager = NetworkManager(logger)
+class Kinopoisk(private val config: AppConfig, private val logger: Logger) {
+    private val networkManager = NetworkManager(config, logger)
     private val movieFactory = MovieFactory()
     private val movies = mutableListOf(
         movieFactory.createMovieKinopoisk(1, "Sherlock", 2000, Genre.DRAMA),
@@ -100,10 +99,9 @@ class Kinopoisk {
     }
 }
 
-class Repository {
-    private val imdbServer = IMDB()
-    private val kinopoiskServer = Kinopoisk()
-    private val logger = Logger()
+class Repository(private val config: AppConfig, private val logger: Logger) {
+    private val imdbServer = IMDB(config, logger)
+    private val kinopoiskServer = Kinopoisk(config, logger)
 
     fun getMovieByName(name: String): List<Movie> {
         var movie = imdbServer.getMovieByName(name)
@@ -117,7 +115,8 @@ class Repository {
             "method: getMovieByName " +
                     "argument: $name " +
                     "method return: $movie " +
-                    "server: + $usedServer"
+                    "server: + $usedServer",
+            config.isLoggingOn
         )
         return movie
     }
@@ -130,7 +129,8 @@ class Repository {
             "MoviesRepo",
             "method: getMoviesByGenre " +
                     "argument: $genre " +
-                    "method return: $movies} "
+                    "method return: $movies} ",
+            config.isLoggingOn
         )
         return movies
     }
@@ -143,7 +143,8 @@ class Repository {
             "MoviesRepo",
             "method: getMoviesNewestThan " +
                     "argument: $year " +
-                    "method return: $movies "
+                    "method return: $movies ",
+            config.isLoggingOn
         )
         return movies
     }
@@ -157,7 +158,8 @@ class Repository {
         movies.addAll(kinopoiskMovies)
         logger.printLog(
             "MoviesRepo",
-            "method: generateNewListOfMovies "
+            "method: generateNewListOfMovies ",
+            config.isLoggingOn
         )
         return movies
     }

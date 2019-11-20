@@ -5,6 +5,7 @@ import com.example.androidpatterns.patterns.b_second.entity.Movie
 import com.example.androidpatterns.patterns.b_second.repo.Genre
 import com.example.androidpatterns.patterns.b_second.repo.Repository
 import com.example.androidpatterns.patterns.b_second.utils.AnalyticManager
+import com.example.androidpatterns.patterns.b_second.utils.Logger
 
 
 /**
@@ -44,17 +45,18 @@ import com.example.androidpatterns.patterns.b_second.utils.AnalyticManager
 
 fun main() {
     val config = AppConfig(isLoggingOn = true, isNetworkPermitted = true)
+    val logger = Logger()
 
-    val moviesFinder = MoviesFinderApp(config)
+    val moviesFinder = MoviesFinderApp(config, logger)
     moviesFinder.showMovieByName("Joker")
     moviesFinder.showMoviesByGenre(Genre.DRAMA)
     moviesFinder.showMoviesNewestThan(2018)
 }
 
 
-class MoviesFinderApp(config: AppConfig) {
-    private val repository = Repository()
-    private val analyticManager = AnalyticManager()
+class MoviesFinderApp(config: AppConfig, logger: Logger) {
+    private val repository = Repository(config, logger)
+    private val analyticManager = AnalyticManager(config, logger)
 
     fun showMovieByName(name: String) {
         analyticManager.trackUserEvent("showMovieByName", name)
