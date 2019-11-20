@@ -5,6 +5,7 @@ import com.example.androidpatterns.patterns.b_second.entity.Genre
 import com.example.androidpatterns.patterns.b_second.entity.Movie
 import com.example.androidpatterns.patterns.b_second.repo.Repository
 import com.example.androidpatterns.patterns.b_second.utils.AnalyticManager
+import com.example.androidpatterns.patterns.b_second.utils.Logger
 
 /**
  * In this task we are going to extend our application and make it look a little bit closer to reality.
@@ -39,6 +40,7 @@ import com.example.androidpatterns.patterns.b_second.utils.AnalyticManager
 
 fun main() {
     val config = AppConfig(isLoggingOn = true, isNetworkPermitted = true)
+    Logger.config = config
     val moviesFinder = MoviesFinderApp(config)
 
     moviesFinder.showMovieByName("Sherlock")

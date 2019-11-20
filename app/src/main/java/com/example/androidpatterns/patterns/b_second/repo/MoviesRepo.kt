@@ -8,8 +8,7 @@ import com.example.androidpatterns.patterns.b_second.utils.Logger
 import com.example.androidpatterns.patterns.b_second.utils.NetworkManager
 
 class IMDB(config: AppConfig) {
-    private val logger = Logger(config)
-    private val networkManager = NetworkManager(logger, config)
+    private val networkManager = NetworkManager(Logger, config)
     private val movieFabric = MovieFabric()
     private val movies = mutableListOf(
         movieFabric.createImdbMovie(
@@ -64,8 +63,7 @@ class IMDB(config: AppConfig) {
 }
 
 class Kinopoisk(config: AppConfig) {
-    private val logger = Logger(config)
-    private val networkManager = NetworkManager(logger, config)
+    private val networkManager = NetworkManager(Logger, config)
     private val movieFabric = MovieFabric()
     private val movies = mutableListOf(
         movieFabric.createKinopoiskMovie(
@@ -122,10 +120,9 @@ class Kinopoisk(config: AppConfig) {
 class Repository(config: AppConfig) {
     private val imdbServer = IMDB(config)
     private val kinopoiskServer = Kinopoisk(config)
-    private val logger = Logger(config)
 
     fun getMovieByName(name: String): List<Movie> {
-        logger.printLog("Repository", "getMovieByName: was called with params : name [$name]")
+        Logger.printLog("Repository", "getMovieByName: was called with params : name [$name]")
 
         var movie = imdbServer.getMovieByName(name)
         var server = "IMDB"
@@ -133,19 +130,19 @@ class Repository(config: AppConfig) {
             movie = kinopoiskServer.getMovieByName(name)
             server = "Kinopoisk"
         }
-        logger.printLog("Repository", "getMovieByName: return movie $movie from server $server")
+        Logger.printLog("Repository", "getMovieByName: return movie $movie from server $server")
         return movie
     }
 
     fun getMoviesByGenre(genre: Genre): MutableList<Movie> {
-        logger.printLog("Repository", "getMovieByGenre: was called with params : name [$genre]")
+        Logger.printLog("Repository", "getMovieByGenre: was called with params : name [$genre]")
         val imdbMovies = imdbServer.getListOfMoviesByGenre(genre)
         val kinopoiskMovies = kinopoiskServer.getListOfMoviesByGenre(genre)
         return generateNewListOfMovies(imdbMovies, kinopoiskMovies, "getMoviesByGenre")
     }
 
     fun getMoviesNewestThan(year: Int): MutableList<Movie> {
-        logger.printLog("Repository", "getMoviesNewestThan: was called with params : name [$year]")
+        Logger.printLog("Repository", "getMoviesNewestThan: was called with params : name [$year]")
         val imdbMovies = imdbServer.getListOfNewestMovies(year)
         val kinopoiskMovies = kinopoiskServer.getListOfNewestMovies(year)
         return generateNewListOfMovies(imdbMovies, kinopoiskMovies, "getMoviesNewestThan")
@@ -159,7 +156,7 @@ class Repository(config: AppConfig) {
         val movies = mutableListOf<Movie>()
         movies.addAll(imdbMovies)
         movies.addAll(kinopoiskMovies)
-        logger.printLog(
+        Logger.printLog(
             "Repository",
             "$funcName: return movie $movies from IMDB & Kinopoisk servers"
         )
