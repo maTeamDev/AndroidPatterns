@@ -4,13 +4,12 @@ import com.example.androidpatterns.patterns.b_second.config.AppConfig
 import kotlin.random.Random
 
 class NetworkManager(private val logger: Logger, private val config: AppConfig) {
-    fun isNetworkAvailiable(): Boolean {
+    fun isNetworkAvailable(): Boolean {
         val isNetworkAvailable = Random.nextBoolean()
         logger.printLog("NetworkManager", "isNetworkAvailable [$isNetworkAvailable]")
         return if(config.isNetworkPermitted) {
             isNetworkAvailable
         } else {
-            println("isNetworkAvailable [FALSE]")
             false
         }
     }

@@ -1,54 +1,11 @@
 package com.example.androidpatterns.patterns.b_second.repo
 
 import com.example.androidpatterns.patterns.b_second.config.AppConfig
+import com.example.androidpatterns.patterns.b_second.entity.Genre
 import com.example.androidpatterns.patterns.b_second.entity.Movie
+import com.example.androidpatterns.patterns.b_second.entity.MovieFabric
 import com.example.androidpatterns.patterns.b_second.utils.Logger
 import com.example.androidpatterns.patterns.b_second.utils.NetworkManager
-
-class MovieFabric {
-    private fun createMovie(
-        id: Int,
-        name: String,
-        year: Int,
-        genre: Genre,
-        serverName: String
-    ): Movie {
-        return Movie(
-            id,
-            name,
-            year,
-            genre,
-            serverName,
-            System.currentTimeMillis()
-        )
-    }
-
-    fun createImdbMovie(
-        id: Int,
-        name: String,
-        year: Int,
-        genre: Genre
-    ): Movie {
-        return createMovie(id, name, year, genre, "IMDB")
-    }
-
-    fun createKinopoiskMovie(
-        id: Int,
-        name: String,
-        year: Int,
-        genre: Genre
-    ): Movie {
-        return createMovie(id, name, year, genre, "Kinopoisk")
-    }
-}
-
-enum class Genre {
-    DETECTIVE,
-    FAMILY,
-    CARTOON,
-    DRAMA,
-    FANTASY,
-}
 
 class IMDB(config: AppConfig) {
     private val logger = Logger(config)
@@ -82,7 +39,7 @@ class IMDB(config: AppConfig) {
     )
 
     fun getMovieByName(name: String): List<Movie> {
-        return if (networkManager.isNetworkAvailiable()) {
+        return if (networkManager.isNetworkAvailable()) {
             movies.filter { it.name == name }
         } else {
             emptyList()
@@ -90,7 +47,7 @@ class IMDB(config: AppConfig) {
     }
 
     fun getListOfMoviesByGenre(genre: Genre): List<Movie> {
-        return if (networkManager.isNetworkAvailiable()) {
+        return if (networkManager.isNetworkAvailable()) {
             movies.filter { it.genre == genre }
         } else {
             emptyList()
@@ -98,7 +55,7 @@ class IMDB(config: AppConfig) {
     }
 
     fun getListOfNewestMovies(year: Int): List<Movie> {
-        return if (networkManager.isNetworkAvailiable()) {
+        return if (networkManager.isNetworkAvailable()) {
             movies.filter { it.year >= year }
         } else {
             emptyList()
@@ -138,7 +95,7 @@ class Kinopoisk(config: AppConfig) {
     )
 
     fun getMovieByName(name: String): List<Movie> {
-        return if (networkManager.isNetworkAvailiable()) {
+        return if (networkManager.isNetworkAvailable()) {
             movies.filter { it.name == name }
         } else {
             emptyList()
@@ -146,7 +103,7 @@ class Kinopoisk(config: AppConfig) {
     }
 
     fun getListOfMoviesByGenre(genre: Genre): List<Movie> {
-        return if (networkManager.isNetworkAvailiable()) {
+        return if (networkManager.isNetworkAvailable()) {
             movies.filter { it.genre == genre }
         } else {
             emptyList()
@@ -154,7 +111,7 @@ class Kinopoisk(config: AppConfig) {
     }
 
     fun getListOfNewestMovies(year: Int): List<Movie> {
-        return if (networkManager.isNetworkAvailiable()) {
+        return if (networkManager.isNetworkAvailable()) {
             movies.filter { it.year >= year }
         } else {
             emptyList()

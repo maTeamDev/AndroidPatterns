@@ -1,8 +1,8 @@
 package com.example.androidpatterns.patterns.b_second
 
 import com.example.androidpatterns.patterns.b_second.config.AppConfig
+import com.example.androidpatterns.patterns.b_second.entity.Genre
 import com.example.androidpatterns.patterns.b_second.entity.Movie
-import com.example.androidpatterns.patterns.b_second.repo.Genre
 import com.example.androidpatterns.patterns.b_second.repo.Repository
 import com.example.androidpatterns.patterns.b_second.utils.AnalyticManager
 
@@ -42,9 +42,7 @@ fun main() {
     val moviesFinder = MoviesFinderApp(config)
 
     moviesFinder.showMovieByName("Sherlock")
-//    moviesFinder.showMoviesByGenre(Genre.DETECTIVE)
 }
-
 
 class MoviesFinderApp(config: AppConfig) {
     private val repository = Repository(config)

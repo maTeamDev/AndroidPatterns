@@ -10,7 +10,7 @@ class AnalyticManager(config: AppConfig) {
     fun trackUserEvent(event: String) {
         val loggerTag = "AnalyticManager.trackUserEvent()"
 
-        if (networkManager.isNetworkAvailiable()) {
+        if (networkManager.isNetworkAvailable()) {
             sendEventToServer(event)
             logger.printLog(
                 loggerTag,

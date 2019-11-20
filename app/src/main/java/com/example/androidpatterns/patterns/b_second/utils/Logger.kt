@@ -1,6 +1,5 @@
 package com.example.androidpatterns.patterns.b_second.utils
 
-import android.content.Context
 import com.example.androidpatterns.patterns.b_second.config.AppConfig
 import java.util.*
 
