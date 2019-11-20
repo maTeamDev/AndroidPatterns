@@ -1,9 +1,11 @@
 package com.example.androidpatterns.patterns.b_second.utils
 
+import com.example.androidpatterns.patterns.b_second.config.AppConfig
 
-class AnalyticManager {
-    private val logger = Logger()
-    private val networkManager = NetworkManager(logger)
+
+class AnalyticManager(config: AppConfig) {
+    private val logger = Logger(config)
+    private val networkManager = NetworkManager(logger, config)
 
     fun trackUserEvent(event: String) {
         val loggerTag = "AnalyticManager.trackUserEvent()"

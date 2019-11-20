@@ -42,13 +42,13 @@ fun main() {
     val moviesFinder = MoviesFinderApp(config)
 
     moviesFinder.showMovieByName("Sherlock")
-    moviesFinder.showMoviesByGenre(Genre.DETECTIVE)
+//    moviesFinder.showMoviesByGenre(Genre.DETECTIVE)
 }
 
 
-class MoviesFinderApp(private val config: AppConfig) {
-    private val repository = Repository()
-    private val analyticManager = AnalyticManager()
+class MoviesFinderApp(config: AppConfig) {
+    private val repository = Repository(config)
+    private val analyticManager = AnalyticManager(config)
 
     fun showMovieByName(name: String) {
         val movie = repository.getMovieByName(name)

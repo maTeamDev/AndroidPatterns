@@ -1,79 +1,83 @@
 package com.example.androidpatterns.patterns.b_second.repo
 
+import com.example.androidpatterns.patterns.b_second.config.AppConfig
 import com.example.androidpatterns.patterns.b_second.entity.Movie
 import com.example.androidpatterns.patterns.b_second.utils.Logger
 import com.example.androidpatterns.patterns.b_second.utils.NetworkManager
 
-fun createMovie(
-    id: Int,
-    name: String,
-    year: Int,
-    genre: Genre,
-    serverName: String
-): Movie {
+class MovieFabric {
+    private fun createMovie(
+        id: Int,
+        name: String,
+        year: Int,
+        genre: Genre,
+        serverName: String
+    ): Movie {
+        return Movie(
+            id,
+            name,
+            year,
+            genre,
+            serverName,
+            System.currentTimeMillis()
+        )
+    }
 
-    /*val genreEnum =
-        when (genre) {
-            "Detective" -> Genre.DETECTIVE
-            "Drama" -> Genre.DRAMA
-            "Cartoon" -> Genre.CARTOON
-            "Comedy" -> Genre.COMEDY
-            "Family" -> Genre.FAMILY
-            "Fantasy" -> Genre.FANTASY
-            else -> Genre.UNKNOWN
-        }*/
+    fun createImdbMovie(
+        id: Int,
+        name: String,
+        year: Int,
+        genre: Genre
+    ): Movie {
+        return createMovie(id, name, year, genre, "IMDB")
+    }
 
-    return Movie(
-        id,
-        name,
-        year,
-        genre,
-        serverName,
-        System.currentTimeMillis()
-    )
+    fun createKinopoiskMovie(
+        id: Int,
+        name: String,
+        year: Int,
+        genre: Genre
+    ): Movie {
+        return createMovie(id, name, year, genre, "Kinopoisk")
+    }
 }
 
 enum class Genre {
     DETECTIVE,
-    COMEDY,
     FAMILY,
     CARTOON,
     DRAMA,
     FANTASY,
-    UNKNOWN
 }
 
-class IMDB {
-    private val logger = Logger()
-    private val networkManager = NetworkManager(logger)
+class IMDB(config: AppConfig) {
+    private val logger = Logger(config)
+    private val networkManager = NetworkManager(logger, config)
+    private val movieFabric = MovieFabric()
     private val movies = mutableListOf(
-        createMovie(
+        movieFabric.createImdbMovie(
             1,
             "Sherlock",
             2000,
-            Genre.DETECTIVE,
-            "IMDB"
+            Genre.DETECTIVE
         ),
-        createMovie(
+        movieFabric.createImdbMovie(
             2,
             "Ghost hunters",
             2005,
-            Genre.FAMILY,
-            "IMDB"
+            Genre.FAMILY
         ),
-        createMovie(
+        movieFabric.createImdbMovie(
             3,
             "Spanch Bob",
             2019,
-            Genre.CARTOON,
-            "IMDB"
+            Genre.CARTOON
         ),
-        createMovie(
+        movieFabric.createImdbMovie(
             4,
             "Wheel",
             2019,
-            Genre.DETECTIVE,
-            "IMDB"
+            Genre.DETECTIVE
         )
     )
 
@@ -102,37 +106,34 @@ class IMDB {
     }
 }
 
-class Kinopoisk {
-    private val logger = Logger()
-    private val networkManager = NetworkManager(logger)
+class Kinopoisk(config: AppConfig) {
+    private val logger = Logger(config)
+    private val networkManager = NetworkManager(logger, config)
+    private val movieFabric = MovieFabric()
     private val movies = mutableListOf(
-        createMovie(
+        movieFabric.createKinopoiskMovie(
             1,
             "Sherlock",
             2000,
-            Genre.DETECTIVE,
-            "Kinopoisk"
+            Genre.DETECTIVE
         ),
-        createMovie(
+        movieFabric.createKinopoiskMovie(
             2,
             "Joker",
             2019,
-            Genre.DRAMA,
-            "Kinopoisk"
+            Genre.DRAMA
         ),
-        createMovie(
+        movieFabric.createKinopoiskMovie(
             3,
             "Spider Man",
             2005,
-            Genre.FANTASY,
-            "Kinopoisk"
+            Genre.FANTASY
         ),
-        createMovie(
+        movieFabric.createKinopoiskMovie(
             4,
             "Sprinter",
             2005,
-            Genre.DRAMA,
-            "Kinopoisk"
+            Genre.DRAMA
         )
     )
 
@@ -161,10 +162,10 @@ class Kinopoisk {
     }
 }
 
-class Repository {
-    private val imdbServer = IMDB()
-    private val kinopoiskServer = Kinopoisk()
-    private val logger = Logger()
+class Repository(config: AppConfig) {
+    private val imdbServer = IMDB(config)
+    private val kinopoiskServer = Kinopoisk(config)
+    private val logger = Logger(config)
 
     fun getMovieByName(name: String): List<Movie> {
         logger.printLog("Repository", "getMovieByName: was called with params : name [$name]")
