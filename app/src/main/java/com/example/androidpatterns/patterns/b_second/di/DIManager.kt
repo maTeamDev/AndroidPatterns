@@ -23,10 +23,10 @@ object DIManager {
     }
 
     fun networkManager(): NetworkManager {
-        return NetworkManager(config as AppConfig, logger as Logger)
+        return NetworkManager(getConfig(), getLogger())
     }
 
     fun analyticManager(): AnalyticManager {
-        return AnalyticManager(config as AppConfig, logger as Logger)
+        return AnalyticManager(getConfig(), getLogger())
     }
 }
