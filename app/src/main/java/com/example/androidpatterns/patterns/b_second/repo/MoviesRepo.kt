@@ -1,9 +1,7 @@
 package com.example.androidpatterns.patterns.b_second.repo
 
-import com.example.androidpatterns.patterns.b_second.config.AppConfig
+import com.example.androidpatterns.patterns.b_second.di.DIManager
 import com.example.androidpatterns.patterns.b_second.entity.Movie
-import com.example.androidpatterns.patterns.b_second.utils.Logger
-import com.example.androidpatterns.patterns.b_second.utils.NetworkManager
 
 enum class Genre {
     DRAMA,
@@ -11,9 +9,14 @@ enum class Genre {
     THRILLER
 }
 
-class MovieFactory() {
-
-    fun createMovie(id: Int, name: String, year: Int, genre: Genre, serverName: String): Movie {
+class MovieFactory {
+    private fun createMovie(
+        id: Int,
+        name: String,
+        year: Int,
+        genre: Genre,
+        serverName: String
+    ): Movie {
         return Movie(
             id,
             name,
@@ -35,8 +38,8 @@ class MovieFactory() {
 }
 
 
-class IMDB(private val config: AppConfig, private val logger: Logger) {
-    private val networkManager = NetworkManager(config, logger)
+class IMDB {
+    private val networkManager = DIManager.networkManager()
     private val movieFactory = MovieFactory()
     private val movies = mutableListOf(
         movieFactory.createMovieImdb(1, "Sherlock", 2000, Genre.DRAMA),
@@ -46,29 +49,29 @@ class IMDB(private val config: AppConfig, private val logger: Logger) {
     )
 
     fun getMovieByName(name: String): List<Movie> {
-        var movies = emptyList<Movie>()
-        if (networkManager.isNetworkAvailiable())
-            movies = movies.filter { it.name == name }
-        return movies
+        var movie = emptyList<Movie>()
+        if (networkManager.isNetworkAvailable())
+            movie = movies.filter { it.name == name }
+        return movie
     }
 
     fun getListOfMoviesByGenre(genre: Genre): List<Movie> {
-        var movies = emptyList<Movie>()
-        if (networkManager.isNetworkAvailiable())
-            movies = movies.filter { it.genre == genre }
-        return movies
+        var moviesNew = emptyList<Movie>()
+        if (networkManager.isNetworkAvailable())
+            moviesNew = movies.filter { it.genre == genre }
+        return moviesNew
     }
 
     fun getListOfNewestMovies(year: Int): List<Movie> {
-        var movies = emptyList<Movie>()
-        if (networkManager.isNetworkAvailiable())
-            movies = movies.filter { it.year >= year }
-        return movies
+        var moviesNew = emptyList<Movie>()
+        if (networkManager.isNetworkAvailable())
+            moviesNew = movies.filter { it.year >= year }
+        return moviesNew
     }
 }
 
-class Kinopoisk(private val config: AppConfig, private val logger: Logger) {
-    private val networkManager = NetworkManager(config, logger)
+class Kinopoisk {
+    private val networkManager = DIManager.networkManager()
     private val movieFactory = MovieFactory()
     private val movies = mutableListOf(
         movieFactory.createMovieKinopoisk(1, "Sherlock", 2000, Genre.DRAMA),
@@ -78,30 +81,32 @@ class Kinopoisk(private val config: AppConfig, private val logger: Logger) {
     )
 
     fun getMovieByName(name: String): List<Movie> {
-        var movies = emptyList<Movie>()
-        if (networkManager.isNetworkAvailiable())
-            movies = movies.filter { it.name == name }
-        return movies
+        var movie = emptyList<Movie>()
+        if (networkManager.isNetworkAvailable())
+            movie = movies.filter { it.name == name }
+        return movie
     }
 
     fun getListOfMoviesByGenre(genre: Genre): List<Movie> {
-        var movies = emptyList<Movie>()
-        if (networkManager.isNetworkAvailiable())
-            movies = movies.filter { it.genre == genre }
-        return movies
+        var moviesNew = emptyList<Movie>()
+        if (networkManager.isNetworkAvailable())
+            moviesNew = movies.filter { it.genre == genre }
+        return moviesNew
     }
 
     fun getListOfNewestMovies(year: Int): List<Movie> {
-        var movies = emptyList<Movie>()
-        if (networkManager.isNetworkAvailiable())
-            movies = movies.filter { it.year >= year }
-        return movies
+        var moviesNew = emptyList<Movie>()
+        if (networkManager.isNetworkAvailable())
+            moviesNew = movies.filter { it.year >= year }
+        return moviesNew
     }
 }
 
-class Repository(private val config: AppConfig, private val logger: Logger) {
-    private val imdbServer = IMDB(config, logger)
-    private val kinopoiskServer = Kinopoisk(config, logger)
+class Repository {
+    private val imdbServer = IMDB()
+    private val kinopoiskServer = Kinopoisk()
+    private val logger = DIManager.getLogger()
+    private val config = DIManager.getConfig()
 
     fun getMovieByName(name: String): List<Movie> {
         var movie = imdbServer.getMovieByName(name)

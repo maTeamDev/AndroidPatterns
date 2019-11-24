@@ -1,10 +1,10 @@
 package com.example.androidpatterns.patterns.b_second
 
 import com.example.androidpatterns.patterns.b_second.config.AppConfig
+import com.example.androidpatterns.patterns.b_second.di.DIManager
 import com.example.androidpatterns.patterns.b_second.entity.Movie
 import com.example.androidpatterns.patterns.b_second.repo.Genre
 import com.example.androidpatterns.patterns.b_second.repo.Repository
-import com.example.androidpatterns.patterns.b_second.utils.AnalyticManager
 import com.example.androidpatterns.patterns.b_second.utils.Logger
 
 
@@ -46,17 +46,16 @@ import com.example.androidpatterns.patterns.b_second.utils.Logger
 fun main() {
     val config = AppConfig(isLoggingOn = true, isNetworkPermitted = true)
     val logger = Logger()
+    DIManager.initialize(logger, config)
 
-    val moviesFinder = MoviesFinderApp(config, logger)
-    moviesFinder.showMovieByName("Joker")
-    moviesFinder.showMoviesByGenre(Genre.DRAMA)
-    moviesFinder.showMoviesNewestThan(2018)
+    val moviesFinder = MoviesFinderApp()
+    moviesFinder.showMovieByName("Ghost hunters")
 }
 
 
-class MoviesFinderApp(config: AppConfig, logger: Logger) {
-    private val repository = Repository(config, logger)
-    private val analyticManager = AnalyticManager(config, logger)
+class MoviesFinderApp {
+    private val repository = Repository()
+    private val analyticManager = DIManager.analyticManager()
 
     fun showMovieByName(name: String) {
         analyticManager.trackUserEvent("showMovieByName", name)
