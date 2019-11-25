@@ -1,6 +1,8 @@
 package com.example.androidpatterns.patterns.b_second.di
 
 import com.example.androidpatterns.patterns.b_second.config.AppConfig
+import com.example.androidpatterns.patterns.b_second.repo.IMDB
+import com.example.androidpatterns.patterns.b_second.repo.Kinopoisk
 import com.example.androidpatterns.patterns.b_second.repo.Repository
 import com.example.androidpatterns.patterns.b_second.utils.AnalyticManager
 import com.example.androidpatterns.patterns.b_second.utils.Logger
@@ -12,6 +14,8 @@ object DIManager {
     private var networkManager: NetworkManager? = null
     private var analyticManager: AnalyticManager? = null
     private var repository: Repository? = null
+    private var imdb: IMDB? = null
+    private var kinopoisk: Kinopoisk? = null
 
     fun initialize(appConfig: AppConfig) {
         logger = Logger()
@@ -31,6 +35,20 @@ object DIManager {
             repository = Repository()
         }
         return repository as Repository
+    }
+
+    fun getIMDB(): IMDB {
+        if (imdb == null) {
+            imdb = IMDB()
+        }
+        return imdb as IMDB
+    }
+
+    fun getKinopoisk(): Kinopoisk {
+        if (kinopoisk == null) {
+            kinopoisk = Kinopoisk()
+        }
+        return kinopoisk as Kinopoisk
     }
 
     fun getNetworkManager(): NetworkManager {

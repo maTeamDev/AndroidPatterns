@@ -101,8 +101,8 @@ class Kinopoisk {
 }
 
 class Repository {
-    private val imdbServer = IMDB()
-    private val kinopoiskServer = Kinopoisk()
+    private val imdbServer = DIManager.getIMDB()
+    private val kinopoiskServer = DIManager.getKinopoisk()
     private val logger = DIManager.getLogger()
     private val config = DIManager.getConfig()
 

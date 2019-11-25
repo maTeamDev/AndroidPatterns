@@ -4,7 +4,6 @@ import com.example.androidpatterns.patterns.b_second.config.AppConfig
 import com.example.androidpatterns.patterns.b_second.di.DIManager
 import com.example.androidpatterns.patterns.b_second.entity.Movie
 import com.example.androidpatterns.patterns.b_second.repo.Genre
-import com.example.androidpatterns.patterns.b_second.repo.Repository
 
 /**
  * In this task we are going to extend our application and make it look a little bit closer to reality.
