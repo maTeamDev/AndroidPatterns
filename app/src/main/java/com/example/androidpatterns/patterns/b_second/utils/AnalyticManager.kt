@@ -1,10 +1,11 @@
 package com.example.androidpatterns.patterns.b_second.utils
 
-import com.example.androidpatterns.patterns.b_second.config.AppConfig
+import com.example.androidpatterns.patterns.b_second.di.DIManager
 
-
-class AnalyticManager(private val config: AppConfig, private val logger: Logger) {
-    private val networkManager = NetworkManager(config, logger)
+class AnalyticManager {
+    private val networkManager = DIManager.getNetworkManager()
+    private val logger = DIManager.getLogger()
+    private val config = DIManager.getConfig()
     fun trackUserEvent(event: String, parameter: String) {
         if (networkManager.isNetworkAvailable()) {
             logger.printLog(

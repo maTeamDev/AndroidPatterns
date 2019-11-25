@@ -5,8 +5,6 @@ import com.example.androidpatterns.patterns.b_second.di.DIManager
 import com.example.androidpatterns.patterns.b_second.entity.Movie
 import com.example.androidpatterns.patterns.b_second.repo.Genre
 import com.example.androidpatterns.patterns.b_second.repo.Repository
-import com.example.androidpatterns.patterns.b_second.utils.Logger
-
 
 /**
  * In this task we are going to extend our application and make it look a little bit closer to reality.
@@ -45,17 +43,15 @@ import com.example.androidpatterns.patterns.b_second.utils.Logger
 
 fun main() {
     val config = AppConfig(isLoggingOn = true, isNetworkPermitted = true)
-    val logger = Logger()
-    DIManager.initialize(logger, config)
+    DIManager.initialize(config)
 
     val moviesFinder = MoviesFinderApp()
     moviesFinder.showMovieByName("Ghost hunters")
 }
 
-
 class MoviesFinderApp {
-    private val repository = Repository()
-    private val analyticManager = DIManager.analyticManager()
+    private val repository = DIManager.getRepo()
+    private val analyticManager = DIManager.getAnalyticManager()
 
     fun showMovieByName(name: String) {
         analyticManager.trackUserEvent("showMovieByName", name)

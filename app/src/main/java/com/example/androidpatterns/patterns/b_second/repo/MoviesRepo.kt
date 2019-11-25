@@ -34,12 +34,10 @@ class MovieFactory {
     fun createMovieKinopoisk(id: Int, name: String, year: Int, genre: Genre): Movie {
         return createMovie(id, name, year, genre, "Kinopoisk")
     }
-
 }
 
-
 class IMDB {
-    private val networkManager = DIManager.networkManager()
+    private val networkManager = DIManager.getNetworkManager()
     private val movieFactory = MovieFactory()
     private val movies = mutableListOf(
         movieFactory.createMovieImdb(1, "Sherlock", 2000, Genre.DRAMA),
@@ -71,7 +69,7 @@ class IMDB {
 }
 
 class Kinopoisk {
-    private val networkManager = DIManager.networkManager()
+    private val networkManager = DIManager.getNetworkManager()
     private val movieFactory = MovieFactory()
     private val movies = mutableListOf(
         movieFactory.createMovieKinopoisk(1, "Sherlock", 2000, Genre.DRAMA),

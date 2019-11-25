@@ -1,9 +1,11 @@
 package com.example.androidpatterns.patterns.b_second.utils
 
-import com.example.androidpatterns.patterns.b_second.config.AppConfig
+import com.example.androidpatterns.patterns.b_second.di.DIManager
 import kotlin.random.Random
 
-class NetworkManager(private val config: AppConfig, private val logger: Logger) {
+class NetworkManager {
+    private val logger = DIManager.getLogger()
+    private val config = DIManager.getConfig()
     fun isNetworkAvailable(): Boolean {
         var isNetworkAvailable = false
         if (config.isNetworkPermitted) {
